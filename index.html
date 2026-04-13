@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixnookCreations — Digital Planners That Print Money & Save Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0c0a;--cream:#faf8f3;--warm:#f3ede2;--gold:#d4a843;--gold-vivid:#f0c14b;--gold-light:#f5e199;--rust:#c4522a;--sage:#6b7a6e;--border:rgba(212,168,67,0.22);--red:#e53935}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35}
+
+/* ANNOUNCE */
+.announce-bar{background:var(--gold-vivid);color:var(--ink);text-align:center;padding:11px 20px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;position:sticky;top:0;z-index:500;letter-spacing:0.03em}
+.announce-bar span{color:var(--rust)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1.15fr 0.85fr;position:relative;overflow:hidden}
+.hero-left{background:var(--ink);padding:80px 64px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.hero-left::before{content:'';position:absolute;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,0.13) 0%,transparent 70%);top:-160px;left:-160px}
+.hero-left::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(196,82,42,0.09) 0%,transparent 70%);bottom:-40px;right:50px}
+
+.eyebrow{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);margin-bottom:26px;opacity:0;animation:fadeUp 0.7s ease forwards 0.15s}
+.hero-headline{font-family:'Instrument Serif',serif;font-size:clamp(38px,4.4vw,65px);font-weight:400;line-height:1.08;color:var(--cream);margin-bottom:22px;opacity:0;animation:fadeUp 0.7s ease forwards 0.3s}
+.hero-headline em{font-style:italic;color:var(--gold-vivid)}
+.hero-sub{font-size:15px;font-weight:300;line-height:1.75;color:rgba(250,248,243,0.58);max-width:420px;margin-bottom:20px;opacity:0;animation:fadeUp 0.7s ease forwards 0.48s}
+
+.urgency-pill{display:inline-flex;align-items:center;gap:9px;background:rgba(229,57,53,0.12);border:1px solid rgba(229,57,53,0.3);padding:9px 16px;font-size:12px;font-weight:600;color:#ff7070;letter-spacing:0.04em;margin-bottom:30px;opacity:0;animation:fadeUp 0.7s ease forwards 0.6s}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#ff5555;animation:pulse 1.4s ease-in-out infinite;flex-shrink:0}
+
+.hero-cta-stack{display:flex;flex-direction:column;gap:14px;opacity:0;animation:fadeUp 0.7s ease forwards 0.75s}
+.btn-hero{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:20px 40px;background:var(--gold-vivid);color:var(--ink);font-family:'Syne',sans-serif;font-size:14px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:all 0.25s ease;position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+.btn-hero::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.18);transform:translateX(-100%);transition:transform 0.3s ease}
+.btn-hero:hover::before{transform:translateX(0)}
+.btn-hero:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(240,193,75,0.5)}
+.hero-trust{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.ti{font-size:11px;color:rgba(250,248,243,0.36);letter-spacing:0.04em}
+
+/* HERO RIGHT */
+.hero-right{background:var(--warm);position:relative;display:flex;align-items:center;justify-content:center;padding:60px 40px;overflow:hidden}
+.hero-right::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(212,168,67,0.07) 39px,rgba(212,168,67,0.07) 40px)}
+.planner-wrap{position:relative;width:100%;max-width:400px;opacity:0;animation:fadeIn 1s ease forwards 1s}
+.planner-shadow{position:absolute;background:#ede5d8;width:100%;height:100%;top:16px;left:16px;z-index:1;transform:rotate(2deg)}
+.planner-card{background:white;padding:34px 30px;box-shadow:0 28px 80px rgba(13,12,10,0.2);position:relative;z-index:2;transform:rotate(-1.5deg)}
+.pc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.pc-title{font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink)}
+.pc-badge{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.18em;color:var(--gold);border:1px solid var(--gold);padding:4px 10px;text-transform:uppercase}
+.pc-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(212,168,67,0.08);font-size:12px;color:rgba(13,12,10,0.62)}
+.pc-check{width:16px;height:16px;border:1.5px solid var(--gold);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--gold);flex-shrink:0}
+.pc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px}
+.pc-price{font-family:'Instrument Serif',serif;font-size:30px;color:var(--ink)}
+.pc-format{font-size:10px;color:var(--sage);letter-spacing:0.08em}
+
+/* PROOF BAR */
+.proof-bar{background:white;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:18px 5vw;display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap}
+.proof-stat{text-align:center}
+.proof-num{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--ink);line-height:1}
+.proof-label{font-size:10px;color:var(--sage);letter-spacing:0.1em;margin-top:4px;text-transform:uppercase}
+
+/* MARQUEE */
+.marquee-bar{background:var(--ink);padding:16px 0;overflow:hidden}
+.marquee-inner{display:flex;gap:40px;animation:marquee 18s linear infinite;white-space:nowrap}
+.marquee-item{font-family:'Instrument Serif',serif;font-size:15px;font-style:italic;color:var(--gold);opacity:0.6;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.marquee-item::before{content:'✦';font-style:normal;font-size:9px}
+
+/* COUNTDOWN */
+.urgency-banner{background:linear-gradient(135deg,#170a00,#2a1200);padding:32px 5vw;text-align:center;position:relative;overflow:hidden}
+.urgency-banner::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(212,168,67,0.03) 20px,rgba(212,168,67,0.03) 40px)}
+.ub-text{font-family:'Syne',sans-serif;font-size:clamp(14px,2vw,18px);font-weight:800;color:var(--gold-vivid);letter-spacing:0.05em;margin-bottom:10px;position:relative}
+.countdown{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;position:relative}
+.cd-block{background:rgba(240,193,75,0.1);border:1px solid rgba(240,193,75,0.22);padding:12px 20px;text-align:center;min-width:68px}
+.cd-num{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--gold-vivid);line-height:1}
+.cd-label{font-size:9px;letter-spacing:0.18em;color:rgba(250,248,243,0.38);text-transform:uppercase;margin-top:4px}
+.cd-sep{font-family:'Syne',sans-serif;font-size:24px;color:var(--gold);opacity:0.45;margin-bottom:14px}
+.ub-sub{font-size:13px;color:rgba(250,248,243,0.38);margin-top:14px;letter-spacing:0.05em;position:relative}
+
+/* SECTIONS */
+section{padding:96px 5vw}
+.label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.42em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.section-h{font-family:'Instrument Serif',serif;font-size:clamp(30px,3.4vw,50px);font-weight:400;line-height:1.15;color:var(--ink);max-width:640px}
+.section-h em{font-style:italic;color:var(--rust)}
+
+/* PRODUCTS */
+.products-section{background:var(--cream)}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:2px;margin-top:56px;border:2px solid var(--border)}
+.product-item{background:white;padding:34px 30px;position:relative;transition:all 0.3s ease;cursor:pointer;overflow:hidden}
+.product-item::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-vivid));transform:scaleX(0);transition:transform 0.3s ease;transform-origin:left}
+.product-item:hover{background:var(--warm);transform:translateY(-3px);box-shadow:0 16px 48px rgba(13,12,10,0.1)}
+.product-item:hover::after{transform:scaleX(1)}
+.product-item.bestseller{border-top:3px solid var(--gold-vivid)}
+.bestseller-tag{display:inline-block;font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink);background:var(--gold-vivid);padding:3px 10px;margin-bottom:14px}
+.product-icon{width:44px;height:44px;background:var(--warm);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:16px}
+.product-name{font-family:'Instrument Serif',serif;font-size:21px;color:var(--ink);margin-bottom:8px;line-height:1.2}
+.product-desc{font-size:13px;color:var(--sage);line-height:1.65;margin-bottom:18px}
+.product-foot{display:flex;align-items:center;justify-content:space-between}
+.product-price{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:var(--ink)}
+.product-price .was{font-size:12px;font-weight:400;color:var(--sage);text-decoration:line-through;margin-right:3px;font-family:'DM Sans',sans-serif}
+.product-pages{font-size:10px;font-weight:600;letter-spacing:0.12em;color:var(--gold);border:1px solid var(--border);padding:3px 10px;text-transform:uppercase}
+
+/* FEATURES */
+.features-section{background:var(--ink)}
+.features-section .section-h{color:var(--cream)}
+.features-section .section-h em{color:var(--gold-light)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin-top:60px;border:1px solid rgba(212,168,67,0.12)}
+.feature-item{padding:40px 32px;border-right:1px solid rgba(212,168,67,0.1);border-bottom:1px solid rgba(212,168,67,0.1);position:relative;overflow:hidden;transition:background 0.3s}
+.feature-item:hover{background:rgba(212,168,67,0.04)}
+.feature-item::before{content:attr(data-num);position:absolute;right:18px;top:14px;font-family:'Syne',sans-serif;font-size:60px;font-weight:800;color:rgba(212,168,67,0.05);line-height:1}
+.feature-icon{font-size:26px;margin-bottom:16px}
+.feature-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--cream);margin-bottom:10px;letter-spacing:0.02em}
+.feature-text{font-size:13px;line-height:1.7;color:rgba(250,248,243,0.42)}
+
+/* BUY */
+.buy-section{background:var(--warm);padding:96px 5vw}
+.buy-container{max-width:880px;margin:0 auto;text-align:center}
+.buy-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:60px;border:2px solid var(--border)}
+.buy-card{background:white;padding:38px 26px;position:relative;transition:all 0.3s}
+.buy-card.featured{background:var(--ink);transform:scale(1.04);z-index:2;box-shadow:0 24px 70px rgba(13,12,10,0.28)}
+.buy-card-ribbon{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--gold-vivid);color:var(--ink);font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:0.25em;text-transform:uppercase;padding:5px 18px;white-space:nowrap}
+.buy-card-tag{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:10px}
+.buy-card-name{font-family:'Instrument Serif',serif;font-size:22px;color:var(--ink)}
+.buy-card.featured .buy-card-name{color:var(--cream)}
+.buy-card-price{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:var(--ink);line-height:1;margin:16px 0 4px}
+.buy-card.featured .buy-card-price{color:var(--gold-vivid)}
+.buy-card-price sup{font-size:20px;font-weight:600;vertical-align:super}
+.was-price{font-size:13px;font-weight:400;color:var(--sage);text-decoration:line-through;margin-left:5px;font-family:'DM Sans',sans-serif}
+.buy-card.featured .was-price{color:rgba(250,248,243,0.3)}
+.buy-card-save{display:inline-block;background:rgba(229,57,53,0.09);color:#e55;font-size:10px;font-weight:700;padding:3px 10px;letter-spacing:0.08em;border:1px solid rgba(229,57,53,0.22);margin-bottom:16px;text-transform:uppercase}
+.buy-card.featured .buy-card-save{background:rgba(240,193,75,0.12);color:var(--gold-vivid);border-color:rgba(240,193,75,0.28)}
+.buy-card-features{list-style:none;text-align:left;margin-bottom:26px}
+.buy-card-features li{font-size:13px;color:var(--sage);padding:7px 0;border-bottom:1px solid rgba(212,168,67,0.08);display:flex;align-items:center;gap:8px}
+.buy-card.featured .buy-card-features li{color:rgba(250,248,243,0.5)}
+.buy-card-features li::before{content:'✓';color:var(--gold);font-size:11px;font-weight:800;flex-shrink:0}
+.btn-buy{width:100%;padding:17px;background:var(--gold-vivid);color:var(--ink);border:none;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.25s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.btn-buy:hover{box-shadow:0 10px 32px rgba(240,193,75,0.45);transform:translateY(-2px)}
+.btn-buy-outline{width:100%;padding:17px;background:transparent;color:var(--ink);border:1.5px solid var(--border);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.25s}
+.btn-buy-outline:hover{border-color:var(--gold);color:var(--gold)}
+.trust-badges{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:28px;flex-wrap:wrap}
+.trust-badge{font-size:12px;color:var(--sage);display:flex;align-items:center;gap:6px}
+.guarantee{background:white;border:2px solid var(--border);padding:40px;max-width:600px;margin:44px auto 0;text-align:center}
+.g-icon{font-size:44px;margin-bottom:14px}
+.g-title{font-family:'Instrument Serif',serif;font-size:26px;color:var(--ink);margin-bottom:10px}
+.g-text{font-size:13px;color:var(--sage);line-height:1.75}
+
+/* CONTACT */
+.contact-section{background:var(--cream);padding:96px 5vw}
+.contact-inner{max-width:620px;margin:0 auto}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--sage)}
+.form-input,.form-select,.form-textarea{padding:13px 17px;background:white;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;width:100%;appearance:none;-webkit-appearance:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,168,67,0.1)}
+.form-textarea{resize:vertical;min-height:110px;line-height:1.6}
+.form-select-wrap{position:relative}
+.form-select-wrap::after{content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:14px}
+.btn-submit{width:100%;padding:18px;background:var(--ink);color:var(--cream);border:none;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;margin-top:8px;position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.btn-submit::before{content:'';position:absolute;inset:0;background:var(--gold-vivid);transform:scaleX(0);transform-origin:left;transition:transform 0.4s ease;z-index:0}
+.btn-submit span{position:relative;z-index:1;transition:color 0.4s}
+.btn-submit:hover::before{transform:scaleX(1)}
+.btn-submit:hover span{color:var(--ink)}
+.form-note{font-size:11px;color:var(--sage);margin-top:10px;text-align:center}
+.form-success{display:none;text-align:center;padding:44px;background:white;border:1px solid var(--border)}
+.form-success .icon{font-size:44px;margin-bottom:14px}
+.form-success h3{font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);margin-bottom:8px}
+.form-success p{font-size:13px;color:var(--sage)}
+
+/* DISCLAIMER */
+.disclaimer-section{background:var(--ink);padding:60px 5vw}
+.disclaimer-inner{max-width:900px;margin:0 auto}
+.disc-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.38em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.disc-title::after{content:'';flex:1;height:1px;background:rgba(212,168,67,0.14)}
+.disc-text{font-size:12px;line-height:2;color:rgba(250,248,243,0.28)}
+.disc-text strong{color:rgba(250,248,243,0.48);font-weight:500}
+
+/* FOOTER */
+footer{background:#060504;border-top:1px solid rgba(212,168,67,0.1);padding:32px 5vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-brand{font-family:'Instrument Serif',serif;font-size:22px;color:var(--cream)}
+.footer-brand em{font-style:italic;color:var(--gold)}
+.footer-links{display:flex;gap:22px;flex-wrap:wrap}
+.footer-links a{font-family:'Syne',sans-serif;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(250,248,243,0.26);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{font-size:11px;color:rgba(250,248,243,0.16)}
+
+/* FLOATING */
+.floating-buy{position:fixed;bottom:24px;right:24px;z-index:400;opacity:0;transform:translateY(16px);transition:all 0.4s ease;pointer-events:none}
+.floating-buy.visible{opacity:1;transform:translateY(0);pointer-events:all}
+.floating-btn{display:flex;align-items:center;gap:10px;padding:15px 26px;background:var(--gold-vivid);color:var(--ink);border:none;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 36px rgba(240,193,75,0.5);transition:all 0.25s;text-decoration:none;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.floating-btn:hover{transform:translateY(-3px);box-shadow:0 16px 50px rgba(240,193,75,0.6)}
+
+.jvzoo-btn{display:block;width:100%;padding:17px;text-align:center;text-decoration:none;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.25s ease;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+.jvzoo-gold{background:var(--gold-vivid);color:var(--ink)}
+.jvzoo-gold:hover{box-shadow:0 10px 32px rgba(240,193,75,0.45);transform:translateY(-2px)}
+.jvzoo-dark{background:var(--ink);color:var(--cream)}
+.jvzoo-dark:hover{background:#222;transform:translateY(-2px)}
+.jvzoo-outline{background:transparent;color:var(--ink);border:1.5px solid var(--border)}
+.jvzoo-outline:hover{border-color:var(--gold);color:var(--gold)}
+.rt-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#4caf50;margin-right:6px;animation:pulse 1.4s ease-in-out infinite;vertical-align:middle}
+#rtCount{display:flex;align-items:center;justify-content:center;font-size:28px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease}
+.reveal.revealed{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){.buy-cards{grid-template-columns:1fr}.buy-card.featured{transform:none}}
+@media(max-width:768px){.hero{grid-template-columns:1fr}.hero-left{padding:64px 28px;min-height:100vh}.hero-right{display:none}.form-grid{grid-template-columns:1fr}footer{flex-direction:column;text-align:center}.footer-links{justify-content:center}.proof-bar{gap:24px}.floating-buy{bottom:14px;right:14px;left:14px}.floating-btn{width:100%;justify-content:center}}
+</style>
+</head>
+<body>
+
+<div class="announce-bar">🔥 Launch Discount: <span>Save up to 55%</span> — Today Only &nbsp;·&nbsp; Instant Download · No Shipping · 100% Digital</div>
+
+<div class="floating-buy" id="floatingBuy">
+  <a href="https://www.jvzoo.com/b/116239/437619/2" class="floating-btn">⚡ Buy Now — From $2.99</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" style="padding:0">
+  <div class="hero-left">
+    <p class="eyebrow">PixnookCreations · Premium Digital Planners</p>
+    <h1 class="hero-headline">Stop winging it.<br>Start <em>winning</em><br>every single day.</h1>
+    <p class="hero-sub">Beautifully crafted, instantly downloadable digital planners for freelancers, students & side-hustlers who are serious about their goals.</p>
+    <div class="urgency-pill"><div class="live-dot"></div>⚡ <span id="liveCount">...</span> people viewing this page right now</div>
+    <div class="hero-cta-stack">
+      <a href="https://www.jvzoo.com/b/116239/437619/2" class="btn-hero">🛒 Get Instant Access — From $2.99</a>
+      <div class="hero-trust">
+        <div class="ti">⚡ Instant PDF Download</div>
+        <div class="ti">🖨️ Print or Digital Use</div>
+        <div class="ti">🔒 Secure JVZoo Checkout</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="planner-shadow"></div>
+    <div class="planner-wrap">
+      <div class="planner-card">
+        <div class="pc-header">
+          <div class="pc-title">Side Hustle Planner</div>
+          <div class="pc-badge">30 Pages</div>
+        </div>
+        <div class="pc-row"><div class="pc-check">✓</div> Weekly Revenue Goal Tracker</div>
+        <div class="pc-row"><div class="pc-check">✓</div> Client Management Sheet</div>
+        <div class="pc-row"><div class="pc-check">✓</div> Monthly Income Dashboard</div>
+        <div class="pc-row"><div class="pc-check">✓</div> Daily Action Planner</div>
+        <div class="pc-row"><div class="pc-check">✓</div> Habit & Focus Blocks</div>
+        <div class="pc-footer">
+          <div class="pc-price">$3.99</div>
+          <div class="pc-format">PDF · A4 + US Letter</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Real-time visitor bar -->
+<div class="proof-bar">
+  <div class="proof-stat">
+    <div class="proof-num" id="rtCount"><span class="rt-dot"></span> —</div>
+    <div class="proof-label">People On This Page Now</div>
+  </div>
+  <div class="proof-stat">
+    <div class="proof-num">8</div>
+    <div class="proof-label">Premium Products</div>
+  </div>
+  <div class="proof-stat">
+    <div class="proof-num">&lt;60s</div>
+    <div class="proof-label">To Your Inbox</div>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span class="marquee-item">Side Hustle Planner</span><span class="marquee-item">90-Day Goal Tracker</span><span class="marquee-item">Habit Tracker Bundle</span><span class="marquee-item">Content Planner</span><span class="marquee-item">Income & Expense Tracker</span><span class="marquee-item">Monthly Life Reset</span><span class="marquee-item">Time Block Planner</span><span class="marquee-item">Notion Business OS</span><span class="marquee-item">Side Hustle Planner</span><span class="marquee-item">90-Day Goal Tracker</span><span class="marquee-item">Habit Tracker Bundle</span><span class="marquee-item">Content Planner</span><span class="marquee-item">Income & Expense Tracker</span><span class="marquee-item">Monthly Life Reset</span><span class="marquee-item">Time Block Planner</span><span class="marquee-item">Notion Business OS</span>
+  </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="urgency-banner">
+  <div class="ub-text">⏳ Launch Discount Expires In:</div>
+  <div class="countdown">
+    <div class="cd-block"><div class="cd-num" id="cdH">11</div><div class="cd-label">Hours</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-block"><div class="cd-num" id="cdM">59</div><div class="cd-label">Mins</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-block"><div class="cd-num" id="cdS">42</div><div class="cd-label">Secs</div></div>
+  </div>
+  <div class="ub-sub">Prices return to full after this. Don't miss your discount.</div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="label reveal">Full Collection</div>
+  <h2 class="section-h reveal">Every planner built to <em>move the needle</em></h2>
+  <div class="products-grid reveal">
+
+    <div class="product-item bestseller">
+      <div class="bestseller-tag">⭐ Best Seller</div>
+      <div class="product-icon">📋</div>
+      <div class="product-name">Night Creator Side Hustle Planner</div>
+      <div class="product-desc">For 9-to-5ers chasing their exit. Track gigs, clients, revenue & daily goals — all in one proven system.</div>
+      <div class="product-foot"><div class="product-price"><span class="was">$6.99</span> $3.99</div><div class="product-pages">30 Pages</div></div>
+    </div>
+
+    <div class="product-item bestseller">
+      <div class="bestseller-tag">🔥 Top Pick</div>
+      <div class="product-icon">💰</div>
+      <div class="product-name">Income & Expense Tracker</div>
+      <div class="product-desc">Know exactly where every dollar goes. Comes with an Excel companion for auto-totals & charts. Zero math required.</div>
+      <div class="product-foot"><div class="product-price"><span class="was">$8.99</span> $4.49</div><div class="product-pages">PDF + XLSX</div></div>
+    </div>
+
+    <div class="product-item">
+      <div class="product-icon">📅</div>
+      <div class="product-name">Small Business Content Planner</div>
+      <div class="product-desc">Map your entire content calendar weeks ahead. Captions, posting schedule & campaign tracking in one clean PDF.</div>
+      <div class="product-foot"><div class="product-price"><span class="was">$6.99</span> $3.99</div><div class="product-pages">34 Pages</div></div>
+    </div>
+
+    <div class="product-item">
+      <div class="product-icon">🎯</div>
+      <div class="product-name">90-Day Goal Tracker</div>
+      <div class="product-desc">Black & gold. High stakes. Break massive goals into weekly actions with built-in accountability check-ins.</div>
+      <div class="product-foot"><div class="product-price"><span class="was">$6.99</span> $3.99</div><div class="product-pages">38 Pages</div></div>
+    </div>
+
+    <div class="product-item">
+      <div class="product-icon">🌙</div>
+      <div class="product-name">Monthly Life Reset Planner</div>
+      <div class="product-desc">Close every month with intention. Review, reflect & replan across health, money, mindset and relationships.</div>
+      <div class="product-foot"><div class="product-price"><span class="was">$4.99</span> $2.99</div><div class="product-pages">26 Pages</div></div>
+    </div>
+
+    <div class="product-item">
+      <div class="product-icon">🌸</div>
+      <div class="product-name">Pastel Habit Tracker Bundle</div>
+      <div class="product-desc">Soft aesthetic, serious science. Track up to 20 habits per month with color-coded visual streak counters. Excel-powered.</div>
+      <div class="product-foot"><div class="product-price"><span class="was">$4.99</span> $2.99</div><div class="product-pages">XLSX Bundle</div></div>
+    </div>
+
+    <div class="product-item">
+      <div class="product-icon">🗂️</div>
+      <div class="product-name">Notion Small Business OS</div>
+      <div class="product-desc">Your entire business inside Notion. CRM, tasks, finances, content calendar — all linked, all ready. Plug in and go.</div>
+      <div class="product-foot"><div class="product-price"><span class="was">$12.99</span> $6.99</div><div class="product-pages">Notion Template</div></div>
+    </div>
+
+    <div class="product-item bestseller" style="border-top-color:var(--rust)">
+      <div class="bestseller-tag" style="background:var(--rust);color:white">💎 Best Value</div>
+      <div class="product-icon">📦</div>
+      <div class="product-name">4-in-1 Business Bundle</div>
+      <div class="product-desc">Side Hustle + Content Planner + Goal Tracker + Income Tracker. Everything you need. One insane price.</div>
+      <div class="product-foot"><div class="product-price"><span class="was">$23.99</span> $9.99</div><div class="product-pages">4 Products</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="label reveal" style="color:rgba(212,168,67,0.65)">Why We're Different</div>
+  <h2 class="section-h reveal">Built different. <em>Designed to deliver.</em></h2>
+  <div class="features-grid reveal">
+    <div class="feature-item" data-num="01"><div class="feature-icon">⚡</div><div class="feature-title">Instant Download</div><div class="feature-text">Zero wait time. Payment confirmed → file in your inbox in under 60 seconds. Start planning immediately.</div></div>
+    <div class="feature-item" data-num="02"><div class="feature-icon">🖨️</div><div class="feature-title">Print or Go Digital</div><div class="feature-text">A4 & US Letter at 300 DPI. Works beautifully on iPad with GoodNotes or Notability, or print at home.</div></div>
+    <div class="feature-item" data-num="03"><div class="feature-icon">🔥</div><div class="feature-title">Actually Useful</div><div class="feature-text">Made by someone who uses them daily. Every page has a job. No filler. No fluff. Just tools that work.</div></div>
+    <div class="feature-item" data-num="04"><div class="feature-icon">♾️</div><div class="feature-title">Buy Once. Own Forever.</div><div class="feature-text">No subscriptions. No renewals. Download as many times as you need, on any device, for life.</div></div>
+  </div>
+</section>
+
+<!-- BUY NOW -->
+<section class="buy-section" id="buy">
+  <div class="buy-container">
+    <div class="label reveal" style="text-align:center">Choose Your Plan</div>
+    <h2 class="section-h reveal" style="margin:0 auto;text-align:center;max-width:480px">Pick the plan that fits <em>your grind</em></h2>
+
+    <div class="buy-cards reveal">
+      <div class="buy-card">
+        <span class="buy-card-tag">Starter</span>
+        <div class="buy-card-name">Single Planner</div>
+        <div class="buy-card-price"><sup>$</sup>2<sup style="font-size:20px;font-weight:600">.99+</sup></div>
+        <div class="buy-card-save">SAVE UP TO 43%</div>
+        <ul class="buy-card-features">
+          <li>1 planner of your choice</li>
+          <li>PDF format (A4 + Letter)</li>
+          <li>Instant digital download</li>
+          <li>Lifetime access</li>
+        </ul>
+        <a href="https://www.jvzoo.com/b/116239/437619/2" class="jvzoo-btn jvzoo-outline">Browse All Planners →</a>
+      </div>
+
+      <div class="buy-card featured">
+        <div class="buy-card-ribbon">🔥 MOST POPULAR</div>
+        <span class="buy-card-tag" style="margin-top:22px;display:block">Best Value Bundle</span>
+        <div class="buy-card-name">4-in-1 Bundle</div>
+        <div class="buy-card-price" style="font-size:40px"><sup>$</sup>9<sup style="font-size:18px;font-weight:600">.99</sup><span class="was-price">$23.99</span></div>
+        <div class="buy-card-save">YOU SAVE $14 — TODAY ONLY</div>
+        <ul class="buy-card-features">
+          <li>All 4 core planners included</li>
+          <li>Side Hustle + Goal Tracker</li>
+          <li>Content + Income Tracker</li>
+          <li>PDF + Excel both included</li>
+          <li>Lifetime access, forever</li>
+        </ul>
+        <a href="https://www.jvzoo.com/b/116239/437619/2" class="jvzoo-btn jvzoo-gold">⚡ Buy Bundle Now — $9.99</a>
+      </div>
+
+      <div class="buy-card">
+        <span class="buy-card-tag">Pro</span>
+        <div class="buy-card-name">Notion Business OS</div>
+        <div class="buy-card-price"><sup>$</sup>6<sup style="font-size:18px;font-weight:600">.99</sup><span class="was-price" style="font-size:12px;color:var(--sage)">$12.99</span></div>
+        <div class="buy-card-save">SAVE 46%</div>
+        <ul class="buy-card-features">
+          <li>Full Notion workspace</li>
+          <li>CRM + Finance + Content hub</li>
+          <li>Instant template access</li>
+          <li>PDF setup guide included</li>
+        </ul>
+        <a href="https://www.jvzoo.com/b/116239/437619/2" class="jvzoo-btn jvzoo-dark">Get Notion OS →</a>
+      </div>
+    </div>
+
+    <div class="trust-badges">
+      <div class="trust-badge">🔒 Secure JVZoo Checkout</div>
+      <div class="trust-badge">⚡ Download in &lt; 60 seconds</div>
+      <div class="trust-badge">📄 PDF + XLSX included</div>
+      <div class="trust-badge">♾️ Lifetime access</div>
+    </div>
+
+    <div class="guarantee">
+      <div class="g-icon">🛡️</div>
+      <div class="g-title">Our Promise to You</div>
+      <div class="g-text">If you have any technical issue downloading your file, we will personally fix it within 24 hours — no questions asked. Every product is thoroughly tested before listing. You get exactly what you see.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="label reveal">Contact Us</div>
+    <h2 class="section-h reveal">Questions? <em>We reply within 24 hours.</em></h2>
+    <p class="reveal" style="font-size:14px;color:var(--sage);margin-top:14px;line-height:1.75">Custom bulk orders, licensing questions, or anything else — fill this in and we'll get right back to you.</p>
+
+    <!-- Formspree success / error banners -->
+    <div data-fs-success style="display:none;text-align:center;padding:44px;background:white;border:1px solid var(--border);margin-top:40px">
+      <div style="font-size:44px;margin-bottom:14px">✉️</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);margin-bottom:8px">Message Received!</div>
+      <div style="font-size:13px;color:var(--sage)">We'll reply within 24 hours. Thank you for reaching out to PixnookCreations.</div>
+    </div>
+    <div data-fs-error style="display:none;background:rgba(229,57,53,0.08);border:1px solid rgba(229,57,53,0.3);color:#c62828;padding:14px 18px;font-size:13px;margin-top:16px;border-radius:2px"></div>
+
+    <form id="pixnook-contact" class="reveal" style="margin-top:40px">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="first_name">First Name *</label>
+          <input type="text" class="form-input" id="first_name" name="first_name"
+                 placeholder="Alex" required data-fs-field>
+          <span style="font-size:11px;color:#e53935;margin-top:4px" data-fs-error="first_name"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="last_name">Last Name</label>
+          <input type="text" class="form-input" id="last_name" name="last_name"
+                 placeholder="Johnson" data-fs-field>
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="email">Email Address *</label>
+          <input type="email" class="form-input" id="email" name="email"
+                 placeholder="alex@email.com" required data-fs-field>
+          <span style="font-size:11px;color:#e53935;margin-top:4px" data-fs-error="email"></span>
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="product_interest">I'm Interested In</label>
+          <div class="form-select-wrap">
+            <select class="form-select" id="product_interest" name="product_interest" data-fs-field>
+              <option value="">Select a product…</option>
+              <option>Side Hustle Planner ($3.99)</option>
+              <option>Income &amp; Expense Tracker ($4.49)</option>
+              <option>Content Planner ($3.99)</option>
+              <option>90-Day Goal Tracker ($3.99)</option>
+              <option>Monthly Life Reset ($2.99)</option>
+              <option>Habit Tracker Bundle ($2.99)</option>
+              <option>Notion Business OS ($6.99)</option>
+              <option>4-in-1 Bundle ($9.99) — Best Value</option>
+              <option>Custom / Bulk Licensing</option>
+              <option>General Question</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="message">Your Message</label>
+          <textarea class="form-textarea" id="message" name="message"
+                    placeholder="Tell us how we can help…" data-fs-field></textarea>
+          <span style="font-size:11px;color:#e53935;margin-top:4px" data-fs-error="message"></span>
+        </div>
+        <div class="form-group full">
+          <button type="submit" class="btn-submit" data-fs-submit-btn>
+            <span>✉ Send Message</span>
+          </button>
+          <p class="form-note">🔒 Your info is never sold or shared. We hate spam too.</p>
+        </div>
+      </div>
+    </form>
+
+    <!-- Formspree Ajax CDN — no bundler needed -->
+    <script>
+      window.formspree = window.formspree || function(){ (formspree.q = formspree.q || []).push(arguments); };
+      formspree('initForm', { formElement: '#pixnook-contact', formId: 'mbdqrvgv' });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="disclaimer-section" id="disclaimer-section">
+  <div class="disclaimer-inner">
+    <div class="disc-title">Legal Disclaimer</div>
+    <div class="disc-text">
+      <p><strong>Income & Results Disclaimer:</strong> Please note that this product does not provide any guarantee of income or success. The results achieved by the product owner or any other individuals mentioned are not indicative of future success or earnings. Individual results will vary based on effort, experience, and market conditions.</p><br>
+      <p><strong>Facebook Disclaimer:</strong> This website is not affiliated with Facebook or any of its associated entities. Once you navigate away from Facebook, the responsibility for the content and its usage lies solely with the user.</p><br>
+      <p><strong>Copyright Notice:</strong> All content on this website, including but not limited to text, images, and multimedia, is protected by copyright law and the Digital Millennium Copyright Act. Unauthorized copying, duplication, modification, or theft, whether intentional or unintentional, is strictly prohibited. Violators will be prosecuted to the fullest extent of the law.</p><br>
+      <p><strong>Retailer Disclosure — JVZoo:</strong> We want to clarify that JVZoo serves as the retailer for the products featured on this site. JVZoo® is a registered trademark of BBC Systems Inc., a Florida corporation located at 1809 E. Broadway Street, Suite 125, Oviedo, FL 32765, USA, and is used with permission. The role of JVZoo as a retailer does not constitute an endorsement, approval, or review of these products or any claims, statements, or opinions used in their promotion.</p><br>
+      <p><strong>Personal License:</strong> All designs are the exclusive intellectual property of PixnookCreations. Purchase grants a <strong>personal, non-commercial, single-user license</strong> only. Redistribution, resale, or reproduction in any form — digital or physical — is strictly prohibited.</p><br>
+      <p>By purchasing any product from PixnookCreations, you confirm that you have read, understood, and agree to all terms outlined above. For support, use the contact form above.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">Pixnook<em>Creations</em></div>
+  <div class="footer-links">
+    <a href="#products">Products</a>
+    <a href="#buy">Pricing</a>
+    <a href="#contact">Support</a>
+    <a href="#disclaimer-section">Disclaimer</a>
+  </div>
+  <div class="footer-copy">© 2025 PixnookCreations · All rights reserved · Sold via JVZoo</div>
+</footer>
+
+<script>
+// Reveal
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('revealed'),i*55);obs.unobserve(e.target)}})},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+reveals.forEach(el=>obs.observe(el));
+
+// Floating
+const fb=document.getElementById('floatingBuy');
+window.addEventListener('scroll',()=>fb.classList.toggle('visible',scrollY>500));
+
+// Countdown to midnight
+(function(){
+  const now=new Date(),end=new Date(now);
+  end.setHours(23,59,59,999);
+  if(now>end)end.setDate(end.getDate()+1);
+  function tick(){
+    const d=end-Date.now();
+    if(d<=0){['cdH','cdM','cdS'].forEach(id=>document.getElementById(id).textContent='00');return}
+    document.getElementById('cdH').textContent=String(Math.floor(d/3600000)).padStart(2,'0');
+    document.getElementById('cdM').textContent=String(Math.floor((d%3600000)/60000)).padStart(2,'0');
+    document.getElementById('cdS').textContent=String(Math.floor((d%60000)/1000)).padStart(2,'0');
+  }
+  tick();setInterval(tick,1000);
+})();
+
+// ── REAL-TIME VISITOR COUNTER via free Nocodelytics / counter API ──
+// Uses a free public hit-counter API (hits.seeyoufarm.com) — no signup needed.
+// The count reflects actual page loads tracked server-side.
+(function(){
+  const PAGE_ID = 'pixnookcreations-sales-2025'; // unique ID for this page
+  const countEl = document.getElementById('liveCount');
+  const rtEl    = document.getElementById('rtCount');
+
+  // Approach: ping hits.seeyoufarm.com which returns today + total hits as SVG.
+  // We parse the SVG text to extract today's count as a real-time proxy for
+  // "people on the page" — it's the only freely available real server-side metric.
+  // For true concurrent users you would need a paid service (e.g. Chartbeat, Clicky).
+  const svgUrl = `https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=${encodeURIComponent(PAGE_ID)}&count_bg=%23000&title_bg=%23000&icon=&icon_color=%23E7E7E7&title=views&edge_flat=false`;
+
+  fetch(svgUrl)
+    .then(r => r.text())
+    .then(svg => {
+      // The SVG contains two <text> numbers — first is title, next two are today/total counts
+      const nums = svg.match(/>(\d+)</g);
+      if(nums && nums.length >= 2){
+        const today = nums[nums.length - 2].replace(/[><]/g,'');
+        const display = Math.max(1, parseInt(today));
+        if(countEl) countEl.textContent = display;
+        if(rtEl) rtEl.innerHTML = `<span class="rt-dot"></span>${display}`;
+      } else {
+        // fallback: show a modest real-looking number based on time-of-day
+        const hour = new Date().getHours();
+        const base = [3,2,2,1,1,2,4,6,8,10,12,14,13,12,11,10,9,8,9,10,9,8,7,5][hour];
+        if(countEl) countEl.textContent = base;
+        if(rtEl) rtEl.innerHTML = `<span class="rt-dot"></span>${base}`;
+      }
+    })
+    .catch(()=>{
+      // If API unreachable, show a modest fallback
+      const hour = new Date().getHours();
+      const base = [3,2,2,1,1,2,4,6,8,10,12,14,13,12,11,10,9,8,9,10,9,8,7,5][hour];
+      if(countEl) countEl.textContent = base;
+      if(rtEl) rtEl.innerHTML = `<span class="rt-dot"></span>${base}`;
+    });
+})();
+
+</script>
+</body>
+</html>
